@@ -59,7 +59,7 @@ Trata-se de uma landing page que permite os usuários buscarem seu duo (dupla) e
    <tbody>
       <tr>
          <td style="font-weight: bold">Front-end (web)</td>
-         <td>React, TypeScript, TailwindCSS, Vite, Axios</td>
+         <td>React, TypeScript, TailwindCSS, Vite, Radix</td>
       </tr>
       <tr>
          <td style="font-weight: bold">Mobile</td>

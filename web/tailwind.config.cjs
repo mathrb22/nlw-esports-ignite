@@ -2,6 +2,10 @@
 module.exports = {
 	content: ['./src/**/*.tsx', './index.html'],
 	theme: {
+		ripple: (theme) => ({
+			colors: theme('colors'),
+			darken: 0.1,
+		}),
 		fontFamily: {
 			sans: ['Inter', 'sans-serif'],
 		},
@@ -15,5 +19,5 @@ module.exports = {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [require('tailwindcss-ripple')()],
 };
