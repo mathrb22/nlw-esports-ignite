@@ -17,6 +17,15 @@ module.exports = {
 				'game-gradient':
 					'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 67.08%)',
 			},
+			keyframes: {
+				'fade-in': {
+					'0%': { opacity: 0, transform: 'translate(-50%, -48%) scale(.96)' },
+					'100%': { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+				},
+			},
+			animation: {
+				'fade-in': 'fade-in 0.2s ease-out',
+			},
 		},
 	},
 	plugins: [require('tailwindcss-ripple')()],

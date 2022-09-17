@@ -52,7 +52,7 @@ function App() {
 
 				<Dialog.Portal>
 					<Dialog.Overlay className='bg-black/60 inset-0 fixed' />
-					<Dialog.Content className='fixed bg-[#2A2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg w-[520px] shadow-lg shadow-black/25'>
+					<Dialog.Content className='fixed bg-[#2A2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg w-[520px] shadow-lg shadow-black/25 animate-fade-in'>
 						<Dialog.Title className='text-3xl font-black'>
 							Publique um anúncio
 						</Dialog.Title>
@@ -93,25 +93,46 @@ function App() {
 									</label>
 
 									<div className='grid grid-cols-4 gap-2'>
-										<button className='w-8 h-8 rounded-lg bg-zinc-900' title='Domingo'>
+										<button
+											type='button'
+											className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+											title='Domingo'>
 											D
 										</button>
-										<button className='w-8 h-8 rounded-lg bg-zinc-900' title='Segunda'>
+										<button
+											type='button'
+											className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+											title='Segunda'>
 											S
 										</button>
-										<button className='w-8 h-8 rounded-lg bg-zinc-900' title='Terça'>
+										<button
+											type='button'
+											className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+											title='Terça'>
 											T
 										</button>
-										<button className='w-8 h-8 rounded-lg bg-zinc-900' title='Quarta'>
+										<button
+											type='button'
+											className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+											title='Quarta'>
 											Q
 										</button>
-										<button className='w-8 h-8 rounded-lg bg-zinc-900' title='Quinta'>
+										<button
+											type='button'
+											className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+											title='Quinta'>
 											Q
 										</button>
-										<button className='w-8 h-8 rounded-lg bg-zinc-900' title='Sexta'>
+										<button
+											type='button'
+											className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+											title='Sexta'>
 											S
 										</button>
-										<button className='w-8 h-8 rounded-lg bg-zinc-900' title='Sábado'>
+										<button
+											type='button'
+											className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+											title='Sábado'>
 											S
 										</button>
 									</div>
