@@ -49,7 +49,7 @@
 
 ## 📃 Sobre
 
-<img src=".github/landing-web.png" alt="Landing page NLW eSports">
+<img src=".github/landing-web.png" alt="Landing page NLW eSports" />
 
 <br/>
 
@@ -58,7 +58,11 @@
 Trata-se de uma landing page que permite os usuários buscarem seu duo (dupla) em jogos online e publicar um anúncio para encontrar outros jogadores no jogo que desejar.
 <br/>
 <br/>
-<img src=".github/create-ad-web.png" alt="Modal de criação de anúncio">
+<img src=".github/create-ad-web.png" alt="Modal de criação de anúncio" />
+
+Na versão mobile, são exibidos os anúncios dos jogadores para os jogos cadastrados, e os usuários terão a possibilidade de se conectarem pelo discord para jogarem juntos.
+
+<img src=".github/mobile-screens.png" alt="Telas do aplicativo mobile" />
 
 ## 🚀 Tecnologias e ferramentas utilizadas
 
@@ -151,5 +155,5 @@ Esse projeto está sob a licença **MIT**. Veja o arquivo _**LICENSE**_ para mai
 ---
 
 <h5 align="center">
-  &copy;2021 - <a href="https://github.com/mathrb22/">Matheus Ribeiro</a>
+  &copy;2022 - <a href="https://github.com/mathrb22/">Matheus Ribeiro</a>
 </h5>
