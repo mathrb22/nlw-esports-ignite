@@ -50,12 +50,9 @@ export default function CreateAdModal({ onCloseModal }: CreateAdModalProps) {
 	async function handleCreateAd(event: FormEvent<HTMLFormElement>) {
 		setIsCreatingAd(true);
 		event.preventDefault();
-		console.log('submit form');
 
 		const formData = new FormData(event.target as HTMLFormElement);
 		const data = Object.fromEntries(formData);
-		console.log(data);
-		console.log(data['game[id]']);
 
 		if (!data.name) return;
 
