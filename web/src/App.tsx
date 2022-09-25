@@ -18,13 +18,18 @@ function App() {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 
 	useEffect(() => {
+		getGames();
+	}, []);
+
+	function getGames() {
 		axios('http://localhost:3333/games').then((response) =>
 			setGames(response.data)
 		);
-	}, []);
+	}
 
-	function closeModal() {
+	function closeModal(created: boolean = false) {
 		setModalIsOpen(false);
+		if (created) getGames();
 	}
 
 	return (
@@ -59,7 +64,7 @@ function App() {
 
 				<Dialog.Root open={modalIsOpen}>
 					<CreateAdBanner onOpenModal={() => setModalIsOpen(true)} />
-					<CreateAdModal onCloseModal={closeModal} />
+					<CreateAdModal onCloseModal={(created) => closeModal(created)} />
 				</Dialog.Root>
 			</div>
 		</>

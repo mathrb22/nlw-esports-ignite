@@ -16,7 +16,7 @@ import { Ad } from '../interfaces/ad';
 import toast, { Toaster } from 'react-hot-toast';
 
 interface CreateAdModalProps {
-	onCloseModal: () => void;
+	onCloseModal: (created: boolean) => void;
 }
 
 export default function CreateAdModal({ onCloseModal }: CreateAdModalProps) {
@@ -40,11 +40,11 @@ export default function CreateAdModal({ onCloseModal }: CreateAdModalProps) {
 		);
 	}, []);
 
-	function handleCloseModal() {
+	function handleCloseModal(created: boolean = false) {
 		setSelectedGame(undefined);
 		setWeekDays([]);
 		setUseVoiceChannel(false);
-		onCloseModal();
+		onCloseModal(created);
 	}
 
 	async function handleCreateAd(event: FormEvent<HTMLFormElement>) {
@@ -68,7 +68,7 @@ export default function CreateAdModal({ onCloseModal }: CreateAdModalProps) {
 			});
 			setIsCreatingAd(false);
 			toast.success('Anúncio criado com sucesso!');
-			handleCloseModal();
+			handleCloseModal(true);
 		} catch (error) {
 			setIsCreatingAd(false);
 			toast.error('Erro ao criar anúncio');
@@ -79,8 +79,8 @@ export default function CreateAdModal({ onCloseModal }: CreateAdModalProps) {
 		<Dialog.Portal>
 			<Dialog.Overlay className='bg-black/60 inset-0 fixed' />
 			<Dialog.Content
-				onInteractOutside={handleCloseModal}
-				onCloseAutoFocus={handleCloseModal}
+				onInteractOutside={() => handleCloseModal(false)}
+				onCloseAutoFocus={() => handleCloseModal(false)}
 				className='fixed bg-[#2A2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg w-[90vw] max-w-[520px] shadow-lg shadow-black/25 animate-fade-in'>
 				<Dialog.Title className='text-3xl font-black'>
 					Publique um anúncio
@@ -315,7 +315,7 @@ export default function CreateAdModal({ onCloseModal }: CreateAdModalProps) {
 
 					<footer className='mt-4 flex-col xxs:flex-row xs-flex-row sm-flex-row md-flex-row lg-flex-row flex gap-4 justify-end'>
 						<Dialog.Close
-							onClick={handleCloseModal}
+							onClick={() => handleCloseModal(false)}
 							type='button'
 							className='bg-zinc-500 rounded-md px-5 h-12 flex items-center justify-center ripple-bg-zinc-400'>
 							Cancelar
