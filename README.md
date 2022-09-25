@@ -38,6 +38,7 @@
 <div align="center">
 
 [**Sobre**](#-sobre) &nbsp;&nbsp;**|**&nbsp;&nbsp;
+[**Features**](#-features) &nbsp;&nbsp;**|**&nbsp;&nbsp;
 [**Tecnologias e ferramentas utilizadas**](#-tecnologias-e-ferramentas-utilizadas) &nbsp;&nbsp;**|**&nbsp;&nbsp;
 [**Layout**](#-layout) &nbsp;&nbsp;**|**&nbsp;&nbsp;
 [**Instalação e execução**](#-instalação-e-execução) &nbsp;&nbsp;**|**&nbsp;&nbsp;
@@ -64,21 +65,50 @@ Na versão mobile, são exibidos os anúncios dos jogadores para os jogos cadast
 
 <img src=".github/mobile-screens.png" alt="Telas do aplicativo mobile" />
 
+## ✨ Features
+
+- [x] Listagem de games (web e mobile)
+- [x] Criação de um novo anúncio (web)
+- [x] Validações de formulário com o Formik e Yup (web)
+- [x] Combobox autocomplete com lista de games para seleção (web)
+- [x] Design totalmente responsivo (web)
+- [x] Feedbacks para o usuário: loading durante criação, toast de sucesso e erro (web)
+- [x] Listagem de anúncios (mobile)
+- [ ] Conexão com o duo (mobile)
+- [ ] Notificações push (mobile)
+
 ## 🚀 Tecnologias e ferramentas utilizadas
 
 <table>
    <tbody>
       <tr>
          <td style="font-weight: bold">Front-end (web)</td>
-         <td>React, TypeScript, TailwindCSS, Vite, Radix</td>
+         <td>
+         <a href="https://reactjs.org/" target="_blank" rel="noopener noreferrer">React</a>,
+         <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">TypeScript</a>,
+         <a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer">TailwindCSS</a>,
+         <a href="https://vitejs.dev/" target="_blank" rel="noopener noreferrer">Vite</a>,
+         <a href="https://www.radix-ui.com/" target="_blank" rel="noopener noreferrer">RadixUI</a>,
+         <a href="https://formik.org/" target="_blank" rel="noopener noreferrer" >Formik</a>,
+         <a href="https://www.npmjs.com/package/yup" target="_blank" rel="noopener noreferrer" >Yup</a>,
+         <a href="https://react-hot-toast.com/" target="_blank" rel="noopener noreferrer" >React Hot Toast</a>,
+         <a href="https://phosphoricons.com/" target="_blank" rel="noopener noreferrer" >Phosphor Icons</a>
+         </td>
       </tr>
       <tr>
          <td style="font-weight: bold">Mobile</td>
-         <td>React Native e Expo</td>
+         <td>
+          <a href="https://reactnative.dev/" target="_blank" rel="noopener noreferrer">React Native</a> e
+          <a href="https://expo.dev/" target="_blank" rel="noopener noreferrer">Expo</a>
+         </td>
       </tr>
       <tr>
          <td style="font-weight: bold">Back-end</td>
-         <td>NodeJs e Prisma</td>
+         <td>
+          <a href="https://nodejs.org/en/" target="_blank" rel="noopener noreferrer">NodeJs</a>
+         e
+             <a href="https://www.prisma.io/" target="_blank" rel="noopener noreferrer">Prisma</a>
+         </td>
       </tr>
    </tbody>
 </table>
