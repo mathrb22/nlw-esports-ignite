@@ -22,6 +22,7 @@ function App() {
 	}, []);
 
 	function getGames() {
+		console.log('getGames app');
 		axios('http://localhost:3333/games').then((response) =>
 			setGames(response.data)
 		);
@@ -64,7 +65,10 @@ function App() {
 
 				<Dialog.Root open={modalIsOpen}>
 					<CreateAdBanner onOpenModal={() => setModalIsOpen(true)} />
-					<CreateAdModal onCloseModal={(created) => closeModal(created)} />
+					<CreateAdModal
+						games={games}
+						onCloseModal={(created) => closeModal(created)}
+					/>
 				</Dialog.Root>
 			</div>
 		</>
