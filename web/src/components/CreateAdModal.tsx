@@ -1,65 +1,31 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Checkbox from '@radix-ui/react-checkbox';
-import { ArrowsVertical, Check, GameController } from 'phosphor-react';
+import * as ToggleGroup from '@radix-ui/react-toggle-group';
+import {
+	ArrowsVertical,
+	Check,
+	CircleNotch,
+	GameController,
+} from 'phosphor-react';
 import { Combobox, Transition } from '@headlessui/react';
 import Input from './Form/Input';
-import { Fragment, useState } from 'react';
+import { FormEvent, Fragment, useEffect, useState } from 'react';
 import { IGame } from '../interfaces/game';
+import axios from 'axios';
+import { Ad } from '../interfaces/ad';
+import toast, { Toaster } from 'react-hot-toast';
 
-const games: IGame[] = [
-	{
-		id: 'c8a9f16a-fc36-4b86-858a-7ea6aeffa11d',
-		title: 'League of Legends',
-		bannerUrl: 'https://static-cdn.jtvnw.net/ttv-boxart/21779-570x760.jpg',
-		_count: {
-			ads: 1,
-		},
-	},
-	{
-		id: '06f605d2-0e58-437f-8260-45879f1f63cb',
-		title: 'Fortnite',
-		bannerUrl: 'https://static-cdn.jtvnw.net/ttv-boxart/33214-570x760.jpg',
-		_count: {
-			ads: 2,
-		},
-	},
-	{
-		id: 'bda9d528-2852-4d87-98c3-ac355be01598',
-		title: 'Counter Strike',
-		bannerUrl: 'https://static-cdn.jtvnw.net/ttv-boxart/32399_IGDB-570x760.jpg',
-		_count: {
-			ads: 0,
-		},
-	},
-	{
-		id: '0e543606-0fb7-4fe1-91e4-e1466f465784',
-		title: 'Apex Legends',
-		bannerUrl: 'https://static-cdn.jtvnw.net/ttv-boxart/511224-570x760.jpg',
-		_count: {
-			ads: 0,
-		},
-	},
-	{
-		id: '0cf70723-95f1-4659-9232-82da0be6a127',
-		title: 'World of Warcraft',
-		bannerUrl: 'https://static-cdn.jtvnw.net/ttv-boxart/18122-570x760.jpg',
-		_count: {
-			ads: 0,
-		},
-	},
-	{
-		id: 'ae10d58a-cf7e-44f0-b8cc-3da742232f5b',
-		title: 'Dota 2',
-		bannerUrl: 'https://static-cdn.jtvnw.net/ttv-boxart/29595-570x760.jpg',
-		_count: {
-			ads: 0,
-		},
-	},
-];
+interface CreateAdModalProps {
+	onCloseModal: () => void;
+}
 
-export default function CreateAdModal() {
-	const [selectedGame, setSelectedGame] = useState<IGame>();
+export default function CreateAdModal({ onCloseModal }: CreateAdModalProps) {
+	const [games, setGames] = useState<IGame[]>([]);
+	const [selectedGame, setSelectedGame] = useState<IGame | undefined>(undefined);
 	const [query, setQuery] = useState('');
+	const [weekDays, setWeekDays] = useState<string[]>([]);
+	const [useVoiceChannel, setUseVoiceChannel] = useState<boolean>(false);
+	const [isCreatingAd, setIsCreatingAd] = useState<boolean>(false);
 
 	const filteredGames =
 		query == ''
@@ -68,20 +34,67 @@ export default function CreateAdModal() {
 					game.title.toLowerCase().includes(query.toLowerCase())
 			  );
 
+	useEffect(() => {
+		axios('http://localhost:3333/games').then((response) =>
+			setGames(response.data)
+		);
+	}, []);
+
+	function handleCloseModal() {
+		setSelectedGame(undefined);
+		setWeekDays([]);
+		setUseVoiceChannel(false);
+		onCloseModal();
+	}
+
+	async function handleCreateAd(event: FormEvent<HTMLFormElement>) {
+		setIsCreatingAd(true);
+		event.preventDefault();
+		console.log('submit form');
+
+		const formData = new FormData(event.target as HTMLFormElement);
+		const data = Object.fromEntries(formData);
+		console.log(data);
+		console.log(data['game[id]']);
+
+		if (!data.name) return;
+
+		try {
+			await axios.post<Ad>(`http://localhost:3333/games/${data['game[id]']}/ads`, {
+				name: data.name,
+				yearsPlaying: Number(data.yearsPlaying),
+				discord: data.discord,
+				weekDays: weekDays.map(Number),
+				hoursStart: data.hoursStart,
+				hoursEnd: data.hoursEnd,
+				useVoiceChannel: useVoiceChannel,
+			});
+			setIsCreatingAd(false);
+			toast.success('Anúncio criado com sucesso!');
+			handleCloseModal();
+		} catch (error) {
+			setIsCreatingAd(false);
+			toast.error('Erro ao criar anúncio');
+		}
+	}
+
 	return (
 		<Dialog.Portal>
 			<Dialog.Overlay className='bg-black/60 inset-0 fixed' />
-			<Dialog.Content className='fixed bg-[#2A2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg w-[90vw] max-w-[520px] shadow-lg shadow-black/25 animate-fade-in'>
+			<Dialog.Content
+				onInteractOutside={handleCloseModal}
+				onCloseAutoFocus={handleCloseModal}
+				className='fixed bg-[#2A2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg w-[90vw] max-w-[520px] shadow-lg shadow-black/25 animate-fade-in'>
 				<Dialog.Title className='text-3xl font-black'>
 					Publique um anúncio
 				</Dialog.Title>
-				<form className='mt-8 flex flex-col gap-4'>
+				<form onSubmit={handleCreateAd} className='mt-8 flex flex-col gap-4'>
 					<div className='flex flex-col gap-2'>
 						<label htmlFor='game' className='font-semibold'>
 							Qual o game?
 						</label>
 
-						<Combobox value={selectedGame} onChange={setSelectedGame}>
+						<Combobox value={selectedGame} onChange={setSelectedGame} name='game'>
 							<div className='relative mt-1'>
 								<div className='relative cursor-default overflow-hidden bg-zinc-900 rounded-lg text-sm placeholder:text-zinc-500 text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
 									<Combobox.Input
@@ -167,7 +180,11 @@ export default function CreateAdModal() {
 						<label htmlFor='name' className='font-semibold'>
 							Seu nome (ou nickname)
 						</label>
-						<Input id='name' placeholder='Como te chamam dentro do game?' />
+						<Input
+							name='name'
+							id='name'
+							placeholder='Como te chamam dentro do game?'
+						/>
 					</div>
 
 					<div className='grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6'>
@@ -175,13 +192,17 @@ export default function CreateAdModal() {
 							<label htmlFor='yearsPlaying' className='font-semibold'>
 								Joga há quantos anos?
 							</label>
-							<Input id='yearsPlaying' placeholder='Tudo bem ser ZERO' />
+							<Input
+								name='yearsPlaying'
+								id='yearsPlaying'
+								placeholder='Tudo bem ser ZERO'
+							/>
 						</div>
 						<div className='flex flex-col gap-2'>
 							<label htmlFor='discord' className='font-semibold'>
 								Qual seu Discord?
 							</label>
-							<Input id='discord' placeholder='Usuario#0000' />
+							<Input name='discord' id='discord' placeholder='Usuario#0000' />
 						</div>
 					</div>
 
@@ -191,50 +212,75 @@ export default function CreateAdModal() {
 								Quando costuma jogar?
 							</label>
 
-							<div className='grid grid-cols-4 gap-2'>
-								<button
+							<ToggleGroup.Root
+								type='multiple'
+								className='grid grid-cols-4 gap-2'
+								value={weekDays}
+								onValueChange={setWeekDays}>
+								<ToggleGroup.Item
+									value='0'
 									type='button'
-									className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+									className={`w-8 h-8 rounded-lg ${
+										weekDays.includes('0') ? 'bg-violet-500' : 'bg-zinc-900 '
+									}`}
 									title='Domingo'>
 									D
-								</button>
-								<button
+								</ToggleGroup.Item>
+								<ToggleGroup.Item
+									value='1'
 									type='button'
-									className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+									className={`w-8 h-8 rounded-lg ${
+										weekDays.includes('1') ? 'bg-violet-500' : 'bg-zinc-900 '
+									}`}
 									title='Segunda'>
 									S
-								</button>
-								<button
+								</ToggleGroup.Item>
+								<ToggleGroup.Item
+									value='2'
 									type='button'
-									className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+									className={`w-8 h-8 rounded-lg ${
+										weekDays.includes('2') ? 'bg-violet-500' : 'bg-zinc-900 '
+									}`}
 									title='Terça'>
 									T
-								</button>
-								<button
+								</ToggleGroup.Item>
+								<ToggleGroup.Item
+									value='3'
 									type='button'
-									className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+									className={`w-8 h-8 rounded-lg ${
+										weekDays.includes('3') ? 'bg-violet-500' : 'bg-zinc-900 '
+									}`}
 									title='Quarta'>
 									Q
-								</button>
-								<button
+								</ToggleGroup.Item>
+								<ToggleGroup.Item
+									value='4'
 									type='button'
-									className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+									className={`w-8 h-8 rounded-lg ${
+										weekDays.includes('4') ? 'bg-violet-500' : 'bg-zinc-900 '
+									}`}
 									title='Quinta'>
 									Q
-								</button>
-								<button
+								</ToggleGroup.Item>
+								<ToggleGroup.Item
+									value='5'
 									type='button'
-									className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+									className={`w-8 h-8 rounded-lg ${
+										weekDays.includes('5') ? 'bg-violet-500' : 'bg-zinc-900 '
+									}`}
 									title='Sexta'>
 									S
-								</button>
-								<button
+								</ToggleGroup.Item>
+								<ToggleGroup.Item
+									value='6'
 									type='button'
-									className='w-8 h-8 rounded-lg bg-zinc-900 ripple-bg-zinc-800'
+									className={`w-8 h-8 rounded-lg ${
+										weekDays.includes('6') ? 'bg-violet-500' : 'bg-zinc-900 '
+									}`}
 									title='Sábado'>
 									S
-								</button>
-							</div>
+								</ToggleGroup.Item>
+							</ToggleGroup.Root>
 						</div>
 
 						<div className='flex flex-col gap-2 flex-1'>
@@ -242,14 +288,27 @@ export default function CreateAdModal() {
 								Qual horário do dia?
 							</label>
 							<div className='grid grid-cols-2 gap-2'>
-								<Input id='hoursStart' type='time' placeholder='De' />
-								<Input id='hoursEnd' type='time' placeholder='Até' />
+								<Input
+									name='hoursStart'
+									id='hoursStart'
+									type='time'
+									placeholder='De'
+									className='appearance-none'
+								/>
+								<Input name='hoursEnd' id='hoursEnd' type='time' placeholder='Até' />
 							</div>
 						</div>
 					</div>
 
 					<div className='mt-2 flex items-center gap-2 text-sm'>
-						<Checkbox.Root className='w-6 h-6 p-1 rounded bg-zinc-900' id='voiceChat'>
+						<Checkbox.Root
+							className='w-6 h-6 p-1 rounded bg-zinc-900'
+							id='voiceChat'
+							checked={useVoiceChannel}
+							onCheckedChange={(checked) => {
+								if (checked == true) setUseVoiceChannel(true);
+								else setUseVoiceChannel(false);
+							}}>
 							<Checkbox.Indicator>
 								<Check className='w-4 h-4 text-emerald-400' />
 							</Checkbox.Indicator>
@@ -259,15 +318,28 @@ export default function CreateAdModal() {
 
 					<footer className='mt-4 flex-col xxs:flex-row xs-flex-row sm-flex-row md-flex-row lg-flex-row flex gap-4 justify-end'>
 						<Dialog.Close
+							onClick={handleCloseModal}
 							type='button'
 							className='bg-zinc-500 rounded-md px-5 h-12 flex items-center justify-center ripple-bg-zinc-400'>
 							Cancelar
 						</Dialog.Close>
 						<button
-							type='button'
-							className='bg-violet-500 rounded-md px-5 h-12 flex items-center justify-center gap-3 ripple-bg-violet-600'>
-							<GameController size={24} />
-							Encontrar duo
+							type='submit'
+							disabled={isCreatingAd}
+							className={`bg-violet-500 rounded-md px-5 h-12 flex items-center justify-center gap-3 ${
+								isCreatingAd ? 'disabled:text-zinc-300' : 'ripple-bg-violet-600'
+							}`}>
+							{isCreatingAd ? (
+								<>
+									<CircleNotch size={24} className='animate-spin' />
+									Enviando...
+								</>
+							) : (
+								<>
+									<GameController size={24} />
+									Encontrar duo
+								</>
+							)}
 						</button>
 					</footer>
 				</form>
