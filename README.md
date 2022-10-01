@@ -74,7 +74,7 @@ Na versão mobile, são exibidos os anúncios dos jogadores para os jogos cadast
 - [x] Design totalmente responsivo (web)
 - [x] Feedbacks para o usuário: loading durante criação, toast de sucesso e erro (web)
 - [x] Listagem de anúncios (mobile)
-- [ ] Conexão com o duo (mobile)
+- [x] Copiar o usuário do discord para a área de transferência (mobile)
 - [ ] Notificações push (mobile)
 
 ## 🚀 Tecnologias e ferramentas utilizadas
